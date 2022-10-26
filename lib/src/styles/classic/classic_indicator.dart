@@ -145,11 +145,12 @@ class _ClassicIndicator extends StatefulWidget {
     this.iconTheme,
     this.progressIndicatorSize,
     this.progressIndicatorStrokeWidth,
-  })  : assert(
-            mainAxisAlignment == MainAxisAlignment.start ||
-                mainAxisAlignment == MainAxisAlignment.center ||
-                mainAxisAlignment == MainAxisAlignment.end,
-            'Only supports [MainAxisAlignment.center], [MainAxisAlignment.start] and [MainAxisAlignment.end].'),
+  })
+      : assert(
+  mainAxisAlignment == MainAxisAlignment.start ||
+      mainAxisAlignment == MainAxisAlignment.center ||
+      mainAxisAlignment == MainAxisAlignment.end,
+  'Only supports [MainAxisAlignment.center], [MainAxisAlignment.start] and [MainAxisAlignment.end].'),
         super(key: key);
 
   @override
@@ -256,9 +257,9 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
   /// Message text.
   String get _messageText {
     if (widget.messageText.contains('%T')) {
-      String fillChar = _updateTime.minute < 10 ? "0" : "";
-      return widget.messageText.replaceAll(
-          "%T", "${_updateTime.hour}:$fillChar${_updateTime.minute}");
+      String formattedDate =
+      DateFormat.jm().format(_updateTime);
+      return widget.messageText.replaceAll("%T", formattedDate);
     }
     return widget.messageText;
   }
@@ -266,7 +267,9 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
   /// Build icon.
   Widget _buildIcon() {
     Widget icon;
-    final iconTheme = widget.iconTheme ?? Theme.of(context).iconTheme;
+    final iconTheme = widget.iconTheme ?? Theme
+        .of(context)
+        .iconTheme;
     ValueKey iconKey;
     if (_result == IndicatorResult.noMore) {
       iconKey = const ValueKey(IndicatorResult.noMore);
@@ -316,16 +319,16 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
       iconKey = const ValueKey(IndicatorMode.drag);
       icon = SizedBox(
         child: widget.pullIconBuilder
-                ?.call(context, widget.state, _iconAnimationController.value) ??
+            ?.call(context, widget.state, _iconAnimationController.value) ??
             Transform.rotate(
               angle: -math.pi * _iconAnimationController.value,
               child: Icon(widget.reverse
                   ? (_axis == Axis.vertical
-                      ? Icons.arrow_upward
-                      : Icons.arrow_back)
+                  ? Icons.arrow_upward
+                  : Icons.arrow_back)
                   : (_axis == Axis.vertical
-                      ? Icons.arrow_downward
-                      : Icons.arrow_forward)),
+                  ? Icons.arrow_downward
+                  : Icons.arrow_forward)),
             ),
       );
     }
@@ -355,19 +358,25 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
     return widget.textBuilder?.call(context, widget.state, _currentText) ??
         Text(
           _currentText,
-          style: widget.textStyle ?? Theme.of(context).textTheme.subtitle1,
+          style: widget.textStyle ?? Theme
+              .of(context)
+              .textTheme
+              .subtitle1,
         );
   }
 
   /// Build text.
   Widget _buildMessage() {
     return widget.messageBuilder
-            ?.call(context, widget.state, widget.messageText, _updateTime) ??
+        ?.call(context, widget.state, widget.messageText, _updateTime) ??
         Padding(
           padding: const EdgeInsets.only(top: 4),
           child: Text(
             _messageText,
-            style: widget.messageStyle ?? Theme.of(context).textTheme.caption,
+            style: widget.messageStyle ?? Theme
+                .of(context)
+                .textTheme
+                .caption,
           ),
         );
   }
@@ -383,15 +392,15 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
             right: 0,
             top: _offset < _actualTriggerOffset
                 ? -(_actualTriggerOffset -
-                        _offset +
-                        (widget.reverse ? _safeOffset : -_safeOffset)) /
-                    2
+                _offset +
+                (widget.reverse ? _safeOffset : -_safeOffset)) /
+                2
                 : (!widget.reverse ? _safeOffset : 0),
             bottom: _offset < _actualTriggerOffset
                 ? null
                 : (widget.reverse ? _safeOffset : 0),
             height:
-                _offset < _actualTriggerOffset ? _actualTriggerOffset : null,
+            _offset < _actualTriggerOffset ? _actualTriggerOffset : null,
             child: Center(
               child: _buildVerticalBody(),
             ),
@@ -452,9 +461,9 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
           Positioned(
             left: _offset < _actualTriggerOffset
                 ? -(_actualTriggerOffset -
-                        _offset +
-                        (widget.reverse ? _safeOffset : -_safeOffset)) /
-                    2
+                _offset +
+                (widget.reverse ? _safeOffset : -_safeOffset)) /
+                2
                 : (!widget.reverse ? _safeOffset : 0),
             right: _offset < _actualTriggerOffset
                 ? null
